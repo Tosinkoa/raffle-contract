@@ -26,7 +26,7 @@ error Raffle__UpkeepNotNeeded(
  *   @dev -------This implements Chainlink VRF v2 and ChainlinkKeepers
  */
 
-contract Raffle is VRFConsumerBaseV2 {
+contract Raffle is VRFConsumerBaseV2, KeeperCompatible {
     /*Type declarations*/
     enum RaffleState {
         OPEN,
@@ -89,6 +89,7 @@ contract Raffle is VRFConsumerBaseV2 {
         bytes memory /*checkData*/
     )
         public
+        view
         override
         returns (
             bool upkeepNeeded,
@@ -100,11 +101,12 @@ contract Raffle is VRFConsumerBaseV2 {
         bool hasPlayers = (s_players.length > 0);
         bool hasBalance = address(this).balance > 0;
         upkeepNeeded = (isOpen && timePassed && hasPlayers && hasBalance);
+        return (upkeepNeeded, "0x0");
     }
 
     function performUpkeep(
         bytes calldata /*performData*/
-    ) external {
+    ) external override {
         (bool upkeepNeeded, ) = checkUpkeep("");
         if (!upkeepNeeded) {
             revert Raffle__UpkeepNotNeeded(
