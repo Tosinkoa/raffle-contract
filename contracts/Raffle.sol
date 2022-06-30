@@ -74,7 +74,7 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatible {
     }
 
     /*Functions */
-    function enterRafle() public payable {
+    function enterRaffle() public payable {
         if (msg.value < i_entranceFee) {
             revert Raffle__NotEnoughETHEntered();
         }
@@ -101,7 +101,6 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatible {
         bool hasPlayers = (s_players.length > 0);
         bool hasBalance = address(this).balance > 0;
         upkeepNeeded = (isOpen && timePassed && hasPlayers && hasBalance);
-        return (upkeepNeeded, "0x0");
     }
 
     function performUpkeep(
@@ -169,11 +168,15 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatible {
         return s_players.length;
     }
 
-    function getLatestTimeSamp() public view returns (uint256) {
+    function getLatestTimeStamp() public view returns (uint256) {
         return s_lastTimeStamp;
     }
 
     function getRequestConfirmations() public pure returns (uint16) {
         return REQUEST_CONFIRMATIONS;
+    }
+
+    function getInterval() public view returns (uint256) {
+        return i_interval;
     }
 }

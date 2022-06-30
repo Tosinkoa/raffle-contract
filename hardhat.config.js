@@ -23,10 +23,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  // solidity: "0.8.4",
-  solidity: {
-    compilers: [{ version: "0.8.0" }, { version: "0.8.4" }]
-  },
+  defaultNetwork: "hardhat",
   networks: {
     hardhat: {
       chainId: 31337,
@@ -39,9 +36,12 @@ module.exports = {
       blockConfirmations: 6,
     },
   },
+  solidity: {
+    compilers: [{ version: "0.8.0" }, { version: "0.8.4" }, { version: "0.8.15" }]
+  },
 
   gasReporter: {
-    enabled: process.env.REPORT_GAS !== undefined,
+    enabled: false,
     currency: "USD",
   },
   etherscan: {
@@ -54,5 +54,8 @@ module.exports = {
     player: {
       default: 1,
     }
+  },
+  mocha: {
+    timeout: 300000
   }
 };
